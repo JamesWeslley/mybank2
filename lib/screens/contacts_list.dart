@@ -3,7 +3,12 @@ import 'package:mybank2/database/app_database.dart';
 import 'package:mybank2/models/contact.dart';
 import 'package:mybank2/screens/contact_form.dart';
 
-class ContactsList extends StatelessWidget {
+class ContactsList extends StatefulWidget {
+  @override
+  _ContactsList createState() => _ContactsList();
+}
+
+class _ContactsList extends State<ContactsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,8 +19,7 @@ class ContactsList extends StatelessWidget {
         initialData: List(),
         future: findAll(),
         builder: (context, snapshot) {
-          switch(snapshot.connectionState){
-
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
@@ -45,20 +49,17 @@ class ContactsList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (context) => ContactForm(),
-                ),
-              )
-              .then(
-                (newContact) => debugPrint(newContact.toString()),
-              );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ContactForm(),
+            ),
+          ).then((value) => setState(() {}));
         },
         child: Icon(Icons.add),
       ),
     );
   }
+
 }
 
 class _ContactItem extends StatelessWidget {
