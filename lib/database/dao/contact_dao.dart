@@ -35,7 +35,7 @@ class ContactDao {
   }
 
   List<Contact> _toList(List<Map<String, dynamic>> result) {
-    final List<Contact> contacts = List();
+    final List<Contact> contacts = [];
     for (Map<String, dynamic> row in result) {
       final Contact contact = Contact(
         row[_id],
