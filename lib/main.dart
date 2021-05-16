@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mybank2/http/webclient.dart';
 import 'package:mybank2/screens/dashboard.dart';
 
 void main() {
   runApp(MyBank2App());
+  findAll();
 }
 
 class MyBank2App extends StatelessWidget {
