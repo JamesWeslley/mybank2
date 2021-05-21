@@ -3,6 +3,7 @@ import 'package:mybank2/components/progress.dart';
 import 'package:mybank2/database/dao/contact_dao.dart';
 import 'package:mybank2/models/contact.dart';
 import 'package:mybank2/screens/contact_form.dart';
+import 'package:mybank2/screens/transaction_form.dart';
 
 class ContactsList extends StatefulWidget {
   @override
@@ -35,7 +36,16 @@ class _ContactsList extends State<ContactsList> {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final Contact contact = contacts[index];
-                  return _ContactItem(contact);
+                  return _ContactItem(
+                    contact,
+                    onclick: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TransactionForm(contact),
+                        ),
+                      );
+                    },
+                  );
                 },
                 itemCount: contacts.length,
               );
@@ -62,13 +72,18 @@ class _ContactsList extends State<ContactsList> {
 
 class _ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onclick;
 
-  _ContactItem(this.contact);
+  _ContactItem(
+    this.contact, {
+    @required this.onclick,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () => onclick(),
         title: Text(
           contact.name,
           style: TextStyle(fontSize: 24.0),
