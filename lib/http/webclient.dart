@@ -9,6 +9,6 @@ final Client client = HttpClientWithInterceptor.build(
 );
 
 final url = Uri.https(
-  'fe6c1967022d.ngrok.io', //https criado pelo ngrok
+  '8e28baac80aa.ngrok.io', //https criado pelo ngrok
   'transactions',
 );
