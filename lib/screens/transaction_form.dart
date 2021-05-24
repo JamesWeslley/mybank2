@@ -6,6 +6,7 @@ import 'package:mybank2/components/transaction_auth_dialog.dart';
 import 'package:mybank2/http/webclients/transaction_webclient.dart';
 import 'package:mybank2/models/contact.dart';
 import 'package:mybank2/models/transaction.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
@@ -19,6 +20,7 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
+  final String transactionId = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,11 @@ class _TransactionFormState extends State<TransactionForm> {
                     onPressed: () {
                       final double value =
                           double.tryParse(_valueController.text);
-                      final transactionCreated =
-                          Transaction(value, widget.contact);
+                      final transactionCreated = Transaction(
+                        transactionId,
+                        value,
+                        widget.contact,
+                      );
                       showDialog(
                         context: context,
                         builder: (contextDialog) {
@@ -103,7 +108,8 @@ class _TransactionFormState extends State<TransactionForm> {
     _showSuccessfulMessage(transaction, context);
   }
 
-  Future _showSuccessfulMessage(Transaction transaction, BuildContext context) async {
+  Future _showSuccessfulMessage(
+      Transaction transaction, BuildContext context) async {
     if (transaction != null) {
       await showDialog(
           context: context,
@@ -120,14 +126,16 @@ class _TransactionFormState extends State<TransactionForm> {
         await _webClient.save(transactionCreated, password).catchError((e) {
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
-      _showFailureMessage(context, message: 'timeout submitting the transaction');
+      _showFailureMessage(context,
+          message: 'timeout submitting the transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
-          _showFailureMessage(context);
+      _showFailureMessage(context);
     });
     return transaction;
   }
 
-  void _showFailureMessage(BuildContext context, {String message = 'Unknown error'}) {
+  void _showFailureMessage(BuildContext context,
+      {String message = 'Unknown error'}) {
     showDialog(
         context: context,
         builder: (contextDialog) {
